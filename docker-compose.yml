@@ -1,0 +1,60 @@
+version: '2.4'
+
+services:
+  moto-jdk:
+    build:
+      context: ./
+      dockerfile: ./docker/jdk/Dockerfile
+      args:
+        uid: ${HOST_UID:-1000}
+        gid: ${HOST_GID:-1000}
+    container_name: moto-jdk
+    ports:
+      - ${API_PORT}:8080
+    volumes:
+      - ./server/src/main:/var/www/moto/server
+    networks:
+      - moto-network
+
+  moto-node:
+    build:
+      context: ./
+      dockerfile: ./docker/node/Dockerfile
+      args:
+        uid: ${HOST_UID:-1000}
+        gid: ${HOST_GID:-1000}
+    user: $HOST_UID
+    ports:
+      - ${APP_PORT}:3000
+    container_name: moto-node
+    environment:
+      NODE_ENV: ${APP_ENV}
+    volumes:
+      - ./client:/app
+      - node_modules:/app/node_modules
+    stdin_open: true
+    networks:
+      - moto-network
+
+  moto-db:
+    container_name: moto-db
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOTPASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}dock
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    command: mysqld --general-log=1 --general-log-file=/var/log/mysql/general-log.log --default-authentication-plugin=mysql_native_password
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - moto-network
+
+networks:
+  moto-network:
+    name: moto-network
+volumes:
+  data:
+  node_modules:
