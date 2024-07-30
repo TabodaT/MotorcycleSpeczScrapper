@@ -41,7 +41,7 @@ services:
     container_name: moto-db
     image: mysql:latest
     ports:
-      - "3306:3306"
+      - ${DB_PORT}:3306
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOTPASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}dock
