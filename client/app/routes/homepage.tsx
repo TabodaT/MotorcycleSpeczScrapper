@@ -1,3 +1,7 @@
+import Button from "~/components/Button"
+import { CtaTypes } from "~/enums/CtaTypes"
+import Link from "~/components/Link"
+
 export default function Homepage(){
     return (
         <div>
@@ -36,7 +40,19 @@ export default function Homepage(){
                 <input className= "border-solid border-2 border-black rounded text-center" placeholder="Search moto" type="search" id="seach" name="q" />
             </div>
             <div className="flex justify-center items-center">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button> 
+                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Search</button>  */}
+                <Button text="Search" type={CtaTypes.PRIMARY} isSubmit={true} />
+                <Button text="Subscribe" type={CtaTypes.SECONDARY} />
+                <Button text="Disable" type={CtaTypes.DISABLED} />
+            </div>
+
+            <div className="flex justify-center items-center">
+                <Link
+                    text="Learn more about our models"
+                    title="Learn more about Moto models"
+                    link="https://www.moto.com/models"
+                    isNewTab={true}
+                />
             </div>
         </div>
     )
